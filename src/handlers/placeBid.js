@@ -9,7 +9,7 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 async function placeBid(event, context) {
     const {id}  = event.pathParameters;
     const {amount} = event.body;
-    
+
     const auction = await getAuctionById(id);
 
     if(amount <= auction.highestBid.amount){
