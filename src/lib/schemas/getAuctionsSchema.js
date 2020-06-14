@@ -1,4 +1,4 @@
-const schema = {
+const getAuctionsSchema = {
     properties:{
         queryStringParameters:{
             type: "object",
@@ -17,4 +17,4 @@ const schema = {
     ]
 };
 
-export default schema;
+export default getAuctionsSchema;
