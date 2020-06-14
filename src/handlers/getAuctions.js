@@ -1,16 +1,29 @@
 import AWS from "aws-sdk";
 import middleware from "../lib/middleware";
 import createError from "http-errors";
+import validator from "@middy/validator";
+import schema from "../lib/schemas/getAuctionsSchema";
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 async function getAuctions(event, context) {
     let auctions;
+    const {status} = event.queryStringParameters;
+
+    const params = {
+        TableName:process.env.AUCTIONS_TABLE_NAME,
+        IndexName: "statusAndEndDate",
+        KeyConditionExpression: "#status = :status",
+        ExpressionAttributeValues:{
+            ":status": status,
+        },
+        ExpressionAttributeNames:{
+            "#status": "status",
+        }
+    };
 
     try{
-        const result = await dynamoDB.scan({
-            TableName: process.env.AUCTIONS_TABLE_NAME
-        }).promise();
+        const result = await dynamoDB.query(params).promise();
 
         auctions = result.Items;
     }catch(err){
@@ -24,5 +37,6 @@ async function getAuctions(event, context) {
     };
 };
 
-export const handler = middleware(getAuctions);
+export const handler = middleware(getAuctions)
+    .use(validator({inputSchema: schema, useDefault: true}));
 
