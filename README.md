@@ -1,5 +1,5 @@
 # ServerlessAuctionHouse
-Serverless Auction House - a practice for the AWS Serverless Architecture
+Serverless Auction House - a use case for the AWS Serverless Architecture and Framework
 
 
 ## Built With
